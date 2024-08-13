@@ -3206,6 +3206,16 @@ enum MGCDAsyncSocketConfig
 
 - (void)closeWithError:(NSError *)error
 {
+    @try {
+        [self closeInternalWithError:error];
+    } @catch (NSException *exception) {
+        LogVerbose(@"Exception on close %@", exception);
+    }
+    
+}
+
+- (void)closeInternalWithError:(NSError *)error
+{
 	LogTrace();
 	NSAssert(dispatch_get_specific(IsOnSocketQueueOrTargetQueueKey), @"Must be dispatched on socketQueue");
 	
